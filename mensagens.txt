@@ -1,0 +1,39 @@
+#autenticação de usuário
+LOGIN USER PASSWORD
+AUTHEN 100 USER #conexão bem sucedida
+AUTHEN 200 USER #senha incorreta
+AUTHEN 300 USER #usuário inexistente
+
+#desconectar da aplicação sem login
+FORCEQUIT
+GOODBYE
+
+#lobby: após o login, pede os servidores disponíveis mais a opção de desconectar da aplicação pelo comando /quit
+SERVERSLIST
+LOBBY #SERVER1 #SERVER2 #SERVER3
+
+#conectando a um servidor específico
+CONNECT #SERVER1
+SERVERCONNECT 100 #SERVER1 #conexão bem sucedida, pronto para o envio de mensagens
+SERVERCONNECT 200 #SERVER2 #conexão mal sucedida, problema genérico
+SERVERCONNECT 300 #SERVER8 #conexão mal sucedida, servidor de entrada não existe
+
+#envio de mensagem para o servidor conectado
+SENDMSG #SERVER1 USER BEGIN "textextextextext..." 
+DELIVERED 100 #mensagem entregue
+DELIVERED 200 #mensagem não entregue
+
+#recebimento de mensagem de outro usuário (momento de inversão de papéis entre cliente e servidor)
+NEWMSG #SERVER1 USER "textextextextext..." #especifica servidor de destino da mensagem, usuário que enviou e a mensagem original
+
+#solicitação para sair do servidor e retornar ao lobby
+EXIT #SERVER1 #através do comando /exit no teclado
+LOBBY #SERVER1 #SERVER2 #SERVER3
+
+#deslogar e desconectar da aplicação
+QUIT
+GOODBYE
+
+#mensagem não está de acordo com o protocolo
+GARBAGE
+ERR 999
