@@ -91,7 +91,7 @@ def clientController(client):
 			
 
 		else:
-			reply = 'ERR 999'
+			reply('ERR 999', client)
 
 
 def welcome():

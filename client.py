@@ -59,9 +59,10 @@ if logged_in:
     encodedMessage = message.encode()
     clientSocket.send(encodedMessage) #envia a mensagem
     reply_message = clientSocket.recv(1024)
-
+    decodedMessage = reply_message.decode()
     print('Type prefered room: ')
-    server_list = reply_message[5:].split(' ')
+    server_list = decodedMessage[5:].split(' ')
+    server_list.remove('')
     for server in server_list:
         print(server)
     print('\\exit to close program')

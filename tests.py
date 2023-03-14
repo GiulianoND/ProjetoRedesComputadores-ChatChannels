@@ -23,8 +23,11 @@ print(f"Flag: {flag}\nPosition: {position}\nPassword: {truepassword} {truepasswo
 
 print(truepassword)
 
-lista = ['a', 'b', 'c', 'd']
-teste = 'd'
+dicio = {'a':'senha', 'b':'senha', 'c':'senha', 'd':'abc'}
+teste = 'e'
+teste_senha = 'abc'
 
-if teste in lista:
-	print('Está na lista.')
+if dicio[teste] == teste_senha:
+	print('Usuário conectado.')
+else:
+	print('Não conectado.')
