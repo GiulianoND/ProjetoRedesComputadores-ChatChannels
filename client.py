@@ -66,4 +66,3 @@ if logged_in:
     for server in server_list:
         print(server)
     print('\\exit to close program')
-    
