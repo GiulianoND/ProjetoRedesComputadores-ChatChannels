@@ -5,6 +5,7 @@
 
 import threading
 from socket import *
+import maskpass
 
 serverIP = '127.0.0.1'
 serverPort = 44444
@@ -14,33 +15,42 @@ clientSocket = socket(AF_INET, SOCK_STREAM)
 logged_in = False
 currentServer = ''
 
+#função request solicita ao servidor alguma ação
 def request(message, client):
 	encodedMessage = message.encode()
 	client.send(encodedMessage)
-        
+
+#função messageFromServer resgata a resposta à solicitação feita anteriormente
 def messageFromServer(client):
     reply_message = client.recv(1024)
     decodedMessage = reply_message.decode()
     return decodedMessage
-    
+
+#função messageFromChat é chamada ao entrar em uma sala para receber as mensagens do chat (roda em thread)
 def messageFromChat():
     while True:
         decodedMessage = messageFromServer(clientSocket)
         splitMessage = decodedMessage.split(' ')
         if splitMessage[0] == 'LEAVESERVER':
             break
-        chatMessage = splitMessage[2] + ': ' + decodedMessage[decodedMessage.find('BEGIN') + 5:]
+        #   NEWMSG #SERVER1 USER BEGIN "textextextextext..."
+        index = decodedMessage.find('BEGIN')
+        chatMessage = splitMessage[2] + ': ' + decodedMessage[index + 6:]
         print(chatMessage)
 
+#sendMessageToChat solicita ao servidor para enviar mensagem para a sala em que o cliente está (roda em thread)
 def sendMessageToChat():
     while True:
         message = input('>')
         if message == '\leave':
+            request('LEAVE ' + currentServer, clientSocket)
             break
-        request(message, clientSocket)
+        #   SENDMSG #SERVER1 USER BEGIN "textextextextext..."
+        totalMessage = 'SENDMSG ' + currentServer + ' ' + user + ' ' + 'BEGIN ' + message
+        request(totalMessage, clientSocket)
 
         
-#tela inicial: pergunta se quer fazer login ou criar usuário
+#tela inicial da aplicação: oferece opções de login, cadastro e fechar programa
 
 print('Welcome!')
 clientSocket.connect((serverIP, serverPort)) #conecta com o servidor
@@ -49,7 +59,7 @@ while True:
     op = int(input('1. Login to your account\n2. Create an user\n3. Quit\n'))
     if op == 1:
         user = input('User: ')
-        password = input('Password: ')
+        password = maskpass.askpass(prompt = 'Password: ', mask = '*')
         message = 'LOGIN ' + user + ' ' + password
         encodedMessage = message.encode()
 
@@ -75,6 +85,7 @@ while True:
     else:
         print('Not available')
 
+#caso o cliente logou com usuário e senha, é oferecida lista com salas para entrar e iniciar conversa
 if logged_in:
     while True:
         message = 'SERVERSLIST'

@@ -37,3 +37,8 @@ listaqualquer = [['uva', 'laranja', 'pera'], ['melancia', 'morango', 'maçã']]
 listaqualquer[1].append('banana')
 
 print('melancia' in listaqualquer[0])
+
+import maskpass
+pwd = maskpass.askpass(prompt = 'Password: ', mask = '*')
+
+print('Senha é '+pwd)

@@ -26,11 +26,12 @@ def reply(message, client):
 	encodedMessage = message.encode()
 	client.send(encodedMessage)
 
-#servidor recebe mensagem de uma sala e repassa para os usuários que estão nessa sala
+#servidor recebe mensagem de um usuário e repassa para os usuários que estão nessa sala
 def transmission(message, server, user):
 	id = server_names.index(server)
 	for client in server_clients[id]:
 		#client.send(message)
+		#	NEWMSG #SERVER1 USER BEGIN "textextextextext..."
 		reply('NEWMSG '+ server + ' ' + user + ' BEGIN ' + message, client)
 
 #tratamento das mensagens enviadas pelo cliente
@@ -42,8 +43,9 @@ def clientController(client):
 
 		if (info[0] == 'FORCEQUIT') or (info[0] == 'SHUTDOWN'):
 			reply('GOODBYE', client)
-			clients.remove(client)
+			#clients.remove(client)
 			if info[0] == 'SHUTDOWN':
+				clients.remove(client)
 				users.remove(user)
 			client.close()
 			break
@@ -80,16 +82,17 @@ def clientController(client):
 		elif info[0] == 'CONNECT':
 			if info[1] in server_names:
 				server_clients[server_names.index(info[1])].append(client)
-				currentServer = info[1]
+				#currentServer = info[1]
 				reply('SERVERCONNECT 100 ' + info[1], client)
 			else:
-				reply('SERVERCONNECT 300 ' + info[1], client)
+				reply('SERVERCONNECT 300 ' + info[1], client) #implementar essa parte no cliente
 		
 		elif info[0] == 'SENDMSG':
+			#	SENDMSG #SERVER1 USER BEGIN "textextextextext..."
 			server_name = info[1]
 			userMessage = info[2]
-			position = str.find("BEGIN ")
-			transmission(decoded_message[position+7 : -1], server_name, userMessage)
+			position = decoded_message.find("BEGIN ")
+			transmission(decoded_message[position+6 :], server_name, userMessage)
 		
 		elif info[0] == 'LEAVE':
 			server_clients[server_names.index(info[1])].remove(client)
