@@ -12,11 +12,33 @@ serverPort = 44444
 clientSocket = socket(AF_INET, SOCK_STREAM)
 
 logged_in = False
-current_server = ''
+currentServer = ''
 
 def request(message, client):
 	encodedMessage = message.encode()
 	client.send(encodedMessage)
+        
+def messageFromServer(client):
+    reply_message = client.recv(1024)
+    decodedMessage = reply_message.decode()
+    return decodedMessage
+    
+def messageFromChat():
+    while True:
+        decodedMessage = messageFromServer(clientSocket)
+        splitMessage = decodedMessage.split(' ')
+        if splitMessage[0] == 'LEAVESERVER':
+            break
+        chatMessage = splitMessage[2] + ': ' + decodedMessage[decodedMessage.find('BEGIN') + 5:]
+        print(chatMessage)
+
+def sendMessageToChat():
+    while True:
+        message = input('>')
+        if message == '\leave':
+            break
+        request(message, clientSocket)
+
         
 #tela inicial: pergunta se quer fazer login ou criar usuário
 
@@ -54,15 +76,39 @@ while True:
         print('Not available')
 
 if logged_in:
-    
-    message = 'SERVERSLIST'
-    encodedMessage = message.encode()
-    clientSocket.send(encodedMessage) #envia a mensagem
-    reply_message = clientSocket.recv(1024)
-    decodedMessage = reply_message.decode()
-    print('Type prefered room: ')
-    server_list = decodedMessage[5:].split(' ')
-    server_list.remove('')
-    for server in server_list:
-        print(server)
-    print('\\exit to close program')
+    while True:
+        message = 'SERVERSLIST'
+        encodedMessage = message.encode()
+        clientSocket.send(encodedMessage) #envia a mensagem
+        reply_message = clientSocket.recv(1024)
+        decodedMessage = reply_message.decode()
+        print('Type prefered room: ')
+        server_list = decodedMessage[5:].split(' ')
+        server_list.remove('')
+        for server in server_list:
+            print(server)
+        print('\\exit to close program')
+        serverOption = input('>')
+
+        if serverOption == '\exit': #é necessário fazer o fechamento da conexão TCP
+            request('SHUTDOWN', clientSocket)
+            clientSocket.close()
+            break
+        
+        replyMessage = 'CONNECT ' + serverOption
+        request(replyMessage, clientSocket)
+        reply = messageFromServer(clientSocket)
+        
+        if reply == 'SERVERCONNECT 100 ' + serverOption:
+            currentServer = serverOption
+            print('Welcome to room ' + serverOption + '!  Type \\leave to leave.')
+            
+            receive_message = threading.Thread(target = messageFromChat)
+            write_thread = threading.Thread(target = sendMessageToChat)
+            
+            receive_message.start()
+            write_thread.start()
+
+            receive_message.join()
+            write_thread.join()
+        currentServer = ''

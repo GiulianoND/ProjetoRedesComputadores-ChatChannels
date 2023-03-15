@@ -24,14 +24,14 @@ DELIVERED 100 #mensagem entregue
 DELIVERED 200 #mensagem não entregue
 
 #recebimento de mensagem de outro usuário (momento de inversão de papéis entre cliente e servidor)
-NEWMSG #SERVER1 USER "textextextextext..." #especifica servidor de destino da mensagem, usuário que enviou e a mensagem original
+NEWMSG #SERVER1 USER BEGIN "textextextextext..." #especifica servidor de destino da mensagem, usuário que enviou e a mensagem original
 
 #solicitação para sair do servidor e retornar ao lobby
-EXIT #SERVER1 #através do comando /exit no teclado
-LOBBY #SERVER1 #SERVER2 #SERVER3
+LEAVE #SERVER1 #através do comando \leave no teclado
+LEAVESERVER
 
 #deslogar e desconectar da aplicação
-QUIT
+SHUTDOWN    #através do comando \exit
 GOODBYE
 
 #mensagem não está de acordo com o protocolo

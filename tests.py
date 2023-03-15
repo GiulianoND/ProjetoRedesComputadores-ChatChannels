@@ -24,10 +24,16 @@ print(f"Flag: {flag}\nPosition: {position}\nPassword: {truepassword} {truepasswo
 print(truepassword)
 
 dicio = {'a':'senha', 'b':'senha', 'c':'senha', 'd':'abc'}
-teste = 'e'
+teste = 'a'
 teste_senha = 'abc'
 
 if dicio[teste] == teste_senha:
 	print('Usuário conectado.')
 else:
 	print('Não conectado.')
+
+listaqualquer = [['uva', 'laranja', 'pera'], ['melancia', 'morango', 'maçã']]
+
+listaqualquer[1].append('banana')
+
+print('melancia' in listaqualquer[0])
