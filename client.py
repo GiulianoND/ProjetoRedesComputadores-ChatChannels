@@ -8,7 +8,7 @@ from socket import *
 import maskpass
 
 serverIP = '127.0.0.1'
-serverPort = 44444
+serverPort = 5005
 
 clientSocket = socket(AF_INET, SOCK_STREAM)
 
@@ -74,6 +74,22 @@ while True:
             print('User ' + user + ' online!')
             logged_in = True
             break
+    elif op == 2:
+        user = input('User: ')
+        password = maskpass.askpass(prompt = 'Password: ', mask = '*')
+        message = 'REGISTER ' + user + ' ' + password
+        encodedMessage = message.encode()
+
+        clientSocket.send(encodedMessage) #envia a mensagem de login
+        replyMessage = clientSocket.recv(1024) #espera a resposta
+        decodedMessage = replyMessage.decode()
+        if decodedMessage == 'REGISTER 200 ' + user:
+            print('User already registered.')
+        elif decodedMessage == 'REGISTER 300 ' + user:
+            print('Failed to register. Try again.')
+        elif decodedMessage == ('REGISTER 100 ' + user):
+            print('User ' + user + ' registered!')
+
     elif op == 3:
         message = 'FORCEQUIT'
         encodedMessage = message.encode()

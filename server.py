@@ -3,12 +3,13 @@
 # Criado por Giuliano Damasceno e Rodrigo Raupp
 # Server side, v 1.0
 
+import json
 import threading
 from socket import *
 
 #alocando servidor
 serverIP = '127.0.0.1'
-serverPort = 44444
+serverPort = 5005
 serverSocket = socket(AF_INET,SOCK_STREAM)
 serverSocket.bind((serverIP, serverPort))
 serverSocket.listen()
@@ -27,12 +28,13 @@ def reply(message, client):
 	client.send(encodedMessage)
 
 #servidor recebe mensagem de um usuário e repassa para os usuários que estão nessa sala
-def transmission(message, server, user):
+def transmission(message, server, user, client):
 	id = server_names.index(server)
-	for client in server_clients[id]:
+	for x in server_clients[id]:
 		#client.send(message)
 		#	NEWMSG #SERVER1 USER BEGIN "textextextextext..."
-		reply('NEWMSG '+ server + ' ' + user + ' BEGIN ' + message, client)
+		if x != client:
+			reply('NEWMSG '+ server + ' ' + user + ' BEGIN ' + message, x)
 
 #tratamento das mensagens enviadas pelo cliente
 def clientController(client):
@@ -53,25 +55,35 @@ def clientController(client):
 		elif info[0] == 'LOGIN':  # 			LOGIN rodrigolaforet abcd		info = ["LOGIN", "rodrigolaforet", "abcd"]
 			user = info[1]
 			password = info[2]
-
-			flag = 0
-			true_password = 0
-			with open('users.txt', 'r') as f:
-				for count, line in enumerate(f):
-					if flag == 1:
-						true_password = line
-						break
-					if count % 2 == 0:
-						if line == (user + '\n'):
-							flag = 1
-			if (flag == 1 and password + '\n' == true_password):
+			f = open('users.json')
+			userInformations = json.load(f)
+			if(userInformations.get(user) != None and userInformations[user] == password):
 				reply('AUTHEN 100 ' + user, client)
 				clients.append(client)
 				users.append(user)
-			elif (flag == 1 and password != true_password):
+			elif (userInformations.get(user) != None and userInformations[user] != password):
 				reply('AUTHEN 200 ' + user, client)
-			elif(flag == 0):
+			else:
 				reply('AUTHEN 300 ' + user, client)
+			f.close()
+
+		elif info[0] == 'REGISTER':  # 			REGISTER rodrigolaforet abcd		info = ["REGISTER", "rodrigolaforet", "abcd"]
+			user = info[1]
+			password = info[2]
+			
+			try: 
+				with open('users.json', 'r') as f:
+					userInformations = json.load(f)
+				if(userInformations.get(user) == None):
+					userInformations[user] = password
+					with open('users.json', 'w') as f:
+						json.dump(userInformations, f)
+					reply('REGISTER 100 ' + user, client)
+				else:
+					reply('REGISTER 200 ' + user, client)
+				
+			except Exception as e:
+				reply('REGISTER 300 ' + user, client)
 
 		elif info[0] == 'SERVERSLIST':
 			answer = 'LOBBY '
@@ -92,7 +104,7 @@ def clientController(client):
 			server_name = info[1]
 			userMessage = info[2]
 			position = decoded_message.find("BEGIN ")
-			transmission(decoded_message[position+6 :], server_name, userMessage)
+			transmission(decoded_message[position+6 :], server_name, userMessage, client)
 		
 		elif info[0] == 'LEAVE':
 			server_clients[server_names.index(info[1])].remove(client)
