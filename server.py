@@ -97,7 +97,7 @@ def clientController(client):
 				#currentServer = info[1]
 				reply('SERVERCONNECT 100 ' + info[1], client)
 			else:
-				reply('SERVERCONNECT 300 ' + info[1], client) #implementar essa parte no cliente
+				reply('SERVERCONNECT 300 ' + info[1], client) 
 		
 		elif info[0] == 'SENDMSG':
 			#	SENDMSG #SERVER1 USER BEGIN "textextextextext..."
