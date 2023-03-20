@@ -27,7 +27,7 @@ Após, abra um novo terminal e execute o arquivo "client.py" que contém o códi
 * python .\client.py
 
 O programa te dá três opções no menu principal: 
-* 1 -Login to your account - Se selecionada, solicita a autenticação do usuário e o leva para o lobby de canais disponíveis
+* 1 - Login to your account - Se selecionada, solicita a autenticação do usuário e o leva para o lobby de canais disponíveis
 * 2 - Create an user - Se selecionada, pede que o usuário crie um novo usuário e senha para 
 * 3 - Quit
 
