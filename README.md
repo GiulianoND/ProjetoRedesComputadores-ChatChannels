@@ -74,7 +74,8 @@ Ao selecionar a opção 1, o usuário deverá informar um nome de usuário e sen
 Ao selecionar a opção 2, o usuário deverá informar um nome de usuário novo e uma senha, caso contrário, uma mensagem de erro será exibida. Caso as credenciais estejam ok, um novo usuário será adicionado.
 Ao selecionar a opção 3, o usuário fechará a aplicação.
 
-Uma lista com os canais disponíveis para interação será exibida quando o usuário estiver no lobby. Nessa etapa, o usuário poderá digitar o texto de um dos canais configurados(#games, #tech, #pets, #series, #movies) ou o comando \exit. 
+Uma lista com os canais disponíveis para interação será exibida quando o usuário estiver no lobby. 
+Nessa etapa, o usuário poderá digitar o texto de um dos canais configurados(#games, #tech, #pets, #series, #movies) ou o comando \exit. 
 Caso ele digite o texto de um dos canais, ele será direcionado para interagir com os usuários conectados naquele canal, caso ele digite o comando "\exit" a aplicação será encerrada.
 
 Dentro de um canal, o usuário poderá enviar mensagens e estas serão direcionadas para os outros usuários conectados naquele canal. Ele também pode escrever o comando "\leave" que o levará para o Lobby novamente.
