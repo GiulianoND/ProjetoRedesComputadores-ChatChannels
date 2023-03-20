@@ -1,4 +1,10 @@
-# ProjetoRedesComputadores-ChatGpt
+# Chat Application With Multiple Rooms
+
+## Introduction
+
+This work is intended to implement a simple chat application with multiple rooms in *Python Language* aiming at message exchange at application layer. The required Python version is 3.8 or above. Please see *Libraries Used* to learn what to install before running application. The application layer uses a personalized, test level type of messages, simulating message trade protocols like HTML, SMTP, FTP, etc. This application uses TCP in the transfer layer to ensure delivering of all messages exchanged between users.
+
+## Application Protocol Characteristics
 
 ## Requisitos de bibliotecas:
 * threading
