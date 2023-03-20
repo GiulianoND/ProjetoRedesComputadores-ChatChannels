@@ -30,6 +30,15 @@ O programa te dá três opções no menu principal:
 * 1. Login to your account - Se selecionada, solicita a autenticação do usuário e o leva para o lobby de canais disponíveis
 * 2. Create an user - Se selecionada, pede que o usuário crie um novo usuário e senha para 
 * 3. Quit
+
+Ao selecionar a opção 1, o usuário deverá informar um nome de usuário e senha válidos, caso contrário, uma mensagem de erro será exibida. Caso as credenciais sejam válidas, ele irá para o lobby, onde poderá escolher qual canal quer interagir.
+Ao selecionar a opção 2, o usuário deverá informar um nome de usuário novo e uma senha, caso contrário, uma mensagem de erro será exibida. Caso as credenciais estejam ok, um novo usuário será adicionado.
+Ao selecionar a opção 3, o usuário fechará a aplicação.
+
+Uma lista com os canais disponíveis para interação será exibida quando o usuário estiver no lobby. Nessa etapa, o usuário poderá digitar o texto de um dos canais configurados(#games, #tech, #pets, #series, #movies) ou o comando \exit. 
+Caso ele digite o texto de um dos canais, ele será direcionado para interagir com os usuários conectados naquele canal, caso ele digite o comando "\exit" a aplicação será encerrada.
+
+Dentro de um canal, o usuário poderá enviar mensagens e estas serão direcionadas para os outros usuários conectados naquele canal. Ele também pode escrever o comando "\leave" que o levará para o Lobby novamente.
 * Autenticação
-  * O arquivo "user.json" contém os dados de identificação dos usuários. É possível realizar o cadastro de novos usuários durante a execução do programa.
-* No menu principal: é disponibilizada três opções para o usuário: 1 - Login
+  * O arquivo "user.json" contém os dados das credenciais dos usuários. É possível realizar o cadastro de novos usuários durante a execução do programa.
+
